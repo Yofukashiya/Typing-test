@@ -267,8 +267,6 @@ let timeLeft = 60;
 let timerInterval;
 let typingStarted = false;
 
-textContainer.textContent = longText;
-
 // Shuffle the words array
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -356,3 +354,47 @@ document.addEventListener("keydown", (e) => {
         textContainer.scrollLeft = scrollAmount;
     }
 });
+
+// Reset the test
+function resetTest() {
+    clearInterval(timerInterval);
+    timeLeft = 60;
+    timerElement.textContent = `Time left: ${timeLeft}s`;
+    finalScoreElement.textContent = "";
+    textContainer.style.display = "block";
+    tryAgainButton.style.display = "none";
+    totalTyped = "";
+    typingStarted = false;
+    currentCharIndex = 0;
+    errors = 0;
+    textContainer.scrollLeft = 0;
+    longText = generateLongText();
+    init();
+}
+
+// Initialize the test
+function init() {
+    if (isMobileDevice()) {
+        showMobileMessage();
+    } else {
+        textContainer.innerText = longText;
+        timerElement.textContent = `Time left: ${timeLeft}s`;
+    }
+}
+
+// Try again listener
+tryAgainButton.addEventListener("click", resetTest);
+
+// Detect if the device is mobile
+function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 800;
+}
+
+// Show message for mobile users
+function showMobileMessage() {
+    textContainer.textContent =
+        "This typing test is designed for desktop use only";
+}
+
+// Startup
+init();
